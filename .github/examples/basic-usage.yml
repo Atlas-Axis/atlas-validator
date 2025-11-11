@@ -1,0 +1,23 @@
+name: Validate Atlas Documentation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Validate Atlas Markdown
+        uses: pppdns/validate-atlas@v1  # or use @main for latest
+        with:
+          file_path: docs/atlas.md
+

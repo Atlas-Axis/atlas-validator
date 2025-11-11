@@ -1,0 +1,51 @@
+name: Auto-version and Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  auto-version:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+      
+      - name: Bump version and get new version
+        id: version_bump
+        run: |
+          npm version patch --no-git-tag-version
+          NEW_VERSION=$(jq -r .version package.json)
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Commit version bump
+        run: |
+          NEW_VERSION="${{ steps.version_bump.outputs.version }}"
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to $NEW_VERSION [skip ci]"
+          git push
+      
+      - name: Create and push tag
+        run: |
+          NEW_VERSION="${{ steps.version_bump.outputs.version }}"
+          git tag "v$NEW_VERSION"
+          git push origin "v$NEW_VERSION"
+

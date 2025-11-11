@@ -1,0 +1,49 @@
+name: 'Validate Atlas Markdown'
+description: 'Validates Atlas Markdown files with comprehensive checks for structure, formatting, and compliance'
+author: 'pppdns'
+
+inputs:
+  file_path:
+    description: 'Path to the Atlas Markdown file to validate'
+    required: true
+
+outputs:
+  has_errors:
+    description: 'Whether validation found errors (true/false)'
+    value: ${{ steps.validate.outputs.has_errors }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: ${{ github.action_path }}/package-lock.json
+    
+    - name: Install dependencies
+      shell: bash
+      run: |
+        cd ${{ github.action_path }}
+        npm ci --prefer-offline --no-audit
+    
+    - name: Run validation
+      id: validate
+      shell: bash
+      run: |
+        # Resolve the absolute path to the file (relative to the calling workflow's workspace)
+        FILE_PATH="${{ inputs.file_path }}"
+        if [[ ! "$FILE_PATH" = /* ]]; then
+          FILE_PATH="${{ github.workspace }}/$FILE_PATH"
+        fi
+        
+        # Run validator from action directory
+        cd ${{ github.action_path }}
+        if npx tsx validate-atlas-markdown.ts "$FILE_PATH"; then
+          echo "has_errors=false" >> $GITHUB_OUTPUT
+        else
+          echo "has_errors=true" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+

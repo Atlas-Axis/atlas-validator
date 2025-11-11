@@ -10,10 +10,22 @@
   "keywords": [
     "markdown",
     "validator",
-    "atlas"
+    "atlas",
+    "github-actions"
   ],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pppdns/validate-atlas.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pppdns/validate-atlas/issues"
+  },
+  "homepage": "https://github.com/pppdns/validate-atlas#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.1"
+  },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "tsx": "^4.0.0",
