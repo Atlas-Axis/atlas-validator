@@ -90,13 +90,11 @@ runs:
           echo "" >> "$OUTPUT_FILE"
           echo "**File:** \`$RELATIVE_FILE_PATH\`" >> "$OUTPUT_FILE"
           echo "" >> "$OUTPUT_FILE"
-          echo "<details>" >> "$OUTPUT_FILE"
-          echo "<summary>📋 Click to see all validation errors</summary>" >> "$OUTPUT_FILE"
+          echo "### 📋 Validation Errors" >> "$OUTPUT_FILE"
           echo "" >> "$OUTPUT_FILE"
           echo "\`\`\`" >> "$OUTPUT_FILE"
           cat "$TEMP_OUTPUT" >> "$OUTPUT_FILE"
           echo "\`\`\`" >> "$OUTPUT_FILE"
-          echo "</details>" >> "$OUTPUT_FILE"
           
           # Also output errors as annotations
           echo "::error title=Atlas Validation Failed::Check the Job Summary or PR comment for detailed validation errors in $RELATIVE_FILE_PATH"
