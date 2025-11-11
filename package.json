@@ -1,0 +1,22 @@
+{
+  "name": "validate-atlas",
+  "version": "1.0.0",
+  "description": "Atlas Markdown Validator - Standalone validator for Atlas Markdown files",
+  "main": "validate-atlas-markdown.ts",
+  "type": "module",
+  "scripts": {
+    "validate": "tsx validate-atlas-markdown.ts"
+  },
+  "keywords": [
+    "markdown",
+    "validator",
+    "atlas"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}
