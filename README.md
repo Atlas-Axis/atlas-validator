@@ -30,7 +30,7 @@ Atlas Markdown Validator - Comprehensive validator for Atlas Markdown files with
 Add this to your workflow file (e.g., `.github/workflows/validate.yml`):
 
 ```yaml
-name: Validate Atlas Documentation
+name: Validate Atlas Markdown
 
 on:
   push:
@@ -166,7 +166,7 @@ chmod +x validate-atlas-markdown.ts
 
 ### Prerequisites
 
-- Node.js 22 or higher
+- Node.js 22
 - npm
 
 ### Setup
@@ -193,14 +193,6 @@ See the [`.github/examples/`](.github/examples/) directory for complete workflow
 
 - [`basic-usage.yml`](.github/examples/basic-usage.yml) - Simple validation workflow
 - [`pull-request.yml`](.github/examples/pull-request.yml) - PR validation with comments
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-ISC
 
 ## Author
 
