@@ -160,13 +160,6 @@ npx tsx validate-atlas-markdown.ts path/to/test.md
 npx tsc --noEmit
 ```
 
-## Examples
-
-See the [`.github/examples/`](.github/examples/) directory for complete workflow examples:
-
-- [`basic-usage.yml`](.github/examples/basic-usage.yml) - Simple validation workflow
-- [`pull-request.yml`](.github/examples/pull-request.yml) - PR validation with comments
-
 ## Author
 
 Atlas Axis
