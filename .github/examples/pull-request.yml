@@ -23,8 +23,8 @@ jobs:
           file_path: atlas.md
         continue-on-error: true
       
-      - name: Post validation results to PR
-        if: always() && github.event_name == 'pull_request'
+      - name: Comment on PR
+        if: steps.validate.outputs.has_errors == 'true'
         uses: actions/github-script@v7
         with:
           script: |
@@ -38,7 +38,7 @@ jobs:
               summary = '## ⚠️ Validation Summary Not Available\n\nUnable to read validation results.';
             }
             
-            // Post new comment
+            // Post comment with validation errors
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,

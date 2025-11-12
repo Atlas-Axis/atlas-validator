@@ -67,6 +67,9 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write # Required for posting comments
     
     steps:
       - name: Checkout code
@@ -74,9 +77,9 @@ jobs:
       
       - name: Validate Atlas Markdown
         id: validate
-        uses: pppdns/validate-atlas@v1  # or use @main for latest
+        uses: pppdns/validate-atlas@main
         with:
-          file_path: docs/atlas.md
+          file_path: atlas.md
         continue-on-error: true
       
       - name: Comment on PR
@@ -84,12 +87,23 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
+            const fs = require('fs');
+            
+            // Read the validation summary file
+            let summary = '';
+            try {
+              summary = fs.readFileSync('validation-summary.md', 'utf8');
+            } catch (error) {
+              summary = '## ⚠️ Validation Summary Not Available\n\nUnable to read validation results.';
+            }
+            
+            // Post comment with validation errors
+            await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '⚠️ Atlas Markdown validation found errors. Please check the workflow logs and file annotations for details.'
-            })
+              issue_number: context.issue.number,
+              body: summary
+            });
       
       - name: Fail if validation errors
         if: steps.validate.outputs.has_errors == 'true'
