@@ -1,6 +1,6 @@
 # Sky Atlas Validator
 
-[![CI](https://github.com/pppdns/validate-atlas/actions/workflows/ci.yml/badge.svg)](https://github.com/pppdns/validate-atlas/actions/workflows/ci.yml)
+[![CI](https://github.com/Atlas-Axis/atlas-validator/actions/workflows/ci.yml/badge.svg)](https://github.com/Atlas-Axis/atlas-validator/actions/workflows/ci.yml)
 
 Atlas Markdown Validator - Comprehensive validator for Atlas Markdown files with support for both CLI and GitHub Actions.
 
@@ -50,7 +50,7 @@ jobs:
       
       - name: Validate Atlas Markdown
         id: validate
-        uses: pppdns/validate-atlas@main
+        uses: Atlas-Axis/atlas-validator@main
         with:
           file_path: atlas.md
         continue-on-error: true
@@ -145,7 +145,7 @@ chmod +x validate-atlas-markdown.ts
 ### Setup
 
 ```bash
-git clone https://github.com/pppdns/validate-atlas.git
+git clone https://github.com/Atlas-Axis/atlas-validator.git
 cd validate-atlas
 npm install
 ```

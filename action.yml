@@ -1,6 +1,6 @@
 name: 'Validate Atlas Markdown'
 description: 'Validates Atlas Markdown files with comprehensive checks for structure, formatting, and compliance'
-author: 'pppdns'
+author: 'Atlas Axis'
 
 inputs:
   file_path:

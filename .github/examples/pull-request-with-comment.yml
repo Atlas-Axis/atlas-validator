@@ -19,7 +19,7 @@ jobs:
       
       - name: Validate Atlas Markdown
         id: validate
-        uses: pppdns/validate-atlas@main
+        uses: Atlas-Axis/atlas-validator@main
         with:
           file_path: docs/atlas.md
         continue-on-error: true

@@ -51,7 +51,7 @@ jobs:
           
           \`\`\`yaml
           - name: Validate Atlas Markdown
-            uses: pppdns/validate-atlas@${{ steps.version.outputs.tag }}
+            uses: Atlas-Axis/atlas-validator@${{ steps.version.outputs.tag }}
             with:
               file_path: path/to/your/atlas.md
           \`\`\`
