@@ -35,7 +35,7 @@ name: Validate Atlas on Pull Request
 on:
   pull_request:
     paths:
-      - '**.md'
+      - "**.md"
 
 jobs:
   validate:
@@ -43,25 +43,25 @@ jobs:
     permissions:
       contents: read
       pull-requests: write # Required for posting comments
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Validate Atlas Markdown
         id: validate
         uses: Atlas-Axis/atlas-validator@main
         with:
           file_path: atlas.md
         continue-on-error: true
-      
+
       - name: Comment on PR
         if: steps.validate.outputs.has_errors == 'true'
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
-            
+
             // Read the validation summary file
             let summary = '';
             try {
@@ -69,7 +69,7 @@ jobs:
             } catch (error) {
               summary = '## ⚠️ Validation Summary Not Available\n\nUnable to read validation results.';
             }
-            
+
             // Post comment with validation errors
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -77,7 +77,7 @@ jobs:
               issue_number: context.issue.number,
               body: summary
             });
-      
+
       - name: Fail if validation errors
         if: steps.validate.outputs.has_errors == 'true'
         run: exit 1
