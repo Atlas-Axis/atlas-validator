@@ -2,6 +2,13 @@ name: 'Validate Atlas Markdown'
 description: 'Validates Atlas Markdown files with comprehensive checks for structure, formatting, and compliance'
 author: 'Atlas Axis'
 
+# This action works with the standard 'pull_request' trigger and does not require
+# write permissions or special configuration. It provides validation feedback through:
+# - GitHub Annotations (inline on Files Changed tab)
+# - Job Summary (detailed report in check details)
+# - Exit code (check passes/fails appropriately)
+# Works reliably with PRs from both the same repository and external forks.
+
 inputs:
   file_path:
     description: 'Path to the Atlas Markdown file to validate'
