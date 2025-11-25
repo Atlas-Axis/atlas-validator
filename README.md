@@ -93,7 +93,7 @@ jobs:
 - PRs from branches in the same repository
 - PRs from external forks
 
-**🔒 Security Note:**
+### **🔒 Security Note:**
 
 This workflow uses `pull_request_target` which runs with elevated permissions. GitHub's security tools may flag this pattern as potentially dangerous. However, **this is safe for validation workflows** because:
 
