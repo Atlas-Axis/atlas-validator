@@ -1,6 +1,6 @@
 {
   "name": "validate-atlas",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Atlas Markdown Validator - Standalone validator for Atlas Markdown files",
   "main": "validate-atlas-markdown.ts",
   "type": "module",
