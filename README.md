@@ -33,8 +33,6 @@ name: Validate Atlas on Pull Request
 
 on:
   pull_request:
-    paths:
-      - "atlas.md"
 
 jobs:
   validate:
