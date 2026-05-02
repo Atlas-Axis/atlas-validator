@@ -8,6 +8,9 @@
 
 name: Relay issue closure to ops-hq
 
+permissions:
+  contents: read
+
 on:
   issues:
     types: [closed]
