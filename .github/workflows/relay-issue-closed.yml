@@ -27,12 +27,21 @@ jobs:
           owner: Atlas-Axis
 
       - name: Dispatch to ops-hq
+        # Security: env-var pattern (Wiz #15) — attacker-controllable fields
+        # like issue.title pass through env vars instead of being interpolated
+        # directly into the shell command. Prevents template-injection where
+        # a malicious title could break out of quotes and execute arbitrary
+        # code. See plan §4.11.
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPO: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          CLOSED_BY: ${{ github.event.sender.login }}
         run: |
           gh api repos/Atlas-Axis/ops-hq/dispatches \
             -f event_type=issue-closed \
-            -f 'client_payload[repo]=${{ github.repository }}' \
-            -f 'client_payload[issue_number]=${{ github.event.issue.number }}' \
-            -f 'client_payload[issue_title]=${{ github.event.issue.title }}' \
-            -f 'client_payload[closed_by]=${{ github.event.sender.login }}'
+            -f "client_payload[repo]=$REPO" \
+            -f "client_payload[issue_number]=$ISSUE_NUMBER" \
+            -f "client_payload[issue_title]=$ISSUE_TITLE" \
+            -f "client_payload[closed_by]=$CLOSED_BY"
