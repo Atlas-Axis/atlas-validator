@@ -18,6 +18,7 @@
  * 7. Document Numbering - Validates patterns for all 12 document types (e.g., A.1, NR-1, .0.3.1)
  * 8. Nesting Rules - Ensures valid parent-child type combinations based on document numbers
  * 9. UUID Validation - Checks format (UUID v4), uniqueness, and warns about empty UUIDs
+ * 10. Document Number Uniqueness - Ensures each document number is used only once
  *
  * Usage:
  *   npx tsx validate-atlas-markdown.ts path/to/atlas.md
@@ -680,6 +681,29 @@ function validateNesting(docs: Document[]): ValidationIssue[] {
   return issues;
 }
 
+function validateDocumentNumberUniqueness(docs: Document[]): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const docNoMap = new Map<string, Document>();
+
+  for (const doc of docs) {
+    const existing = docNoMap.get(doc.docNo);
+    if (existing) {
+      issues.push({
+        line: doc.line,
+        severity: 'error',
+        message: `🔢 Duplicate document number found: ${doc.docNo}`,
+        found: `First occurrence: line ${existing.line} (${existing.docNo} - ${existing.name} [${existing.type}])\nDuplicate at: line ${doc.line} (${doc.docNo} - ${doc.name} [${doc.type}])`,
+        reason: 'Each Atlas document must have a unique document number',
+        action: `Renumber the duplicate at line ${doc.line} to a free slot among its siblings`,
+      });
+    } else {
+      docNoMap.set(doc.docNo, doc);
+    }
+  }
+
+  return issues;
+}
+
 function validateUUIDs(docs: Document[]): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   const uuidMap = new Map<string, Document>();
@@ -804,6 +828,7 @@ function validate(content: string): ValidationIssue[] {
 
   issues.push(...validateNesting(docs));
   issues.push(...validateUUIDs(docs));
+  issues.push(...validateDocumentNumberUniqueness(docs));
 
   // Filter out suppressed issues
   const filteredIssues = filterSuppressedIssues(issues, docs, lines);

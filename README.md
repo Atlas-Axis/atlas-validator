@@ -21,6 +21,7 @@ Atlas Markdown Validator - Comprehensive validator for Atlas Markdown files with
 6. **Document Numbering** - Validates patterns for all 12 document types (e.g., A.1, NR-1, .0.3.1)
 7. **Nesting Rules** - Ensures valid parent-child type combinations
 8. **UUID Validation** - Checks format (UUID v4), uniqueness, and warns about empty UUIDs
+9. **Document Number Uniqueness** - Ensures each document number is used only once
 
 ## Usage as GitHub Action
 
