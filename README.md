@@ -6,7 +6,7 @@ Atlas Markdown Validator - Comprehensive validator for Atlas Markdown files with
 
 ## Features
 
-- ✅ **Complete Validation**: 8 comprehensive validation checks
+- ✅ **Complete Validation**: 9 comprehensive validation checks
 - 🔄 **GitHub Actions Integration**: Use as a reusable action in your workflows
 - 📍 **Inline Annotations**: Errors appear directly on PR files in GitHub
 - 🎯 **Detailed Reports**: Clear error messages with examples and action steps
@@ -20,7 +20,8 @@ Atlas Markdown Validator - Comprehensive validator for Atlas Markdown files with
 5. **Extra Fields** - Validates format, order, and presence of required fields (for Type Specification, Scenario, Scenario Variation documents)
 6. **Document Numbering** - Validates patterns for all 12 document types (e.g., A.1, NR-1, .0.3.1)
 7. **Nesting Rules** - Ensures valid parent-child type combinations
-8. **UUID Validation** - Checks format (UUID v4), uniqueness, and warns about empty UUIDs
+8. **Ethereum Address Checksums** - Ensures `0x` Ethereum addresses use EIP-55 checksum casing
+9. **UUID Validation** - Checks format (UUID v4), uniqueness, and warns about empty UUIDs
 
 ## Usage as GitHub Action
 

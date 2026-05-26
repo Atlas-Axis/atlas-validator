@@ -17,7 +17,8 @@
  *    - Needed Research (1 field)
  * 7. Document Numbering - Validates patterns for all 12 document types (e.g., A.1, NR-1, .0.3.1)
  * 8. Nesting Rules - Ensures valid parent-child type combinations based on document numbers
- * 9. UUID Validation - Checks format (UUID v4), uniqueness, and warns about empty UUIDs
+ * 9. Ethereum Address Checksums - Enforces EIP-55 checksum casing for 0x addresses
+ * 10. UUID Validation - Checks format (UUID v4), uniqueness, and warns about empty UUIDs
  *
  * Usage:
  *   npx tsx validate-atlas-markdown.ts path/to/atlas.md
@@ -30,6 +31,7 @@
  */
 import * as fs from 'fs';
 import * as path from 'path';
+import { keccak_256 } from '@noble/hashes/sha3.js';
 
 // GitHub Actions support (optional)
 type ActionsCore = typeof import('@actions/core') | null;
@@ -120,6 +122,7 @@ const EXTRA_FIELDS: Partial<Record<AtlasDocumentType, string[]>> = {
 const TITLE_REGEX = /^(#+)\s+([^\s]+)\s+-\s+(.+?)\s+\[(.+?)\]\s{2}<!--\s*UUID:\s*([a-f0-9-]*)\s*-->$/i;
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const EXTRA_FIELD_LABEL_REGEX = /^\*\*(.+?)\*\*:\s*$/;
+const ETHEREUM_ADDRESS_REGEX = /\b0x[a-fA-F0-9]{40}\b/g;
 
 // Temporary suppression list for known duplicate UUIDs that will be fixed soon
 const SUPPRESSED_DUPLICATE_UUIDS = new Set([
@@ -729,6 +732,49 @@ function validateUUIDs(docs: Document[]): ValidationIssue[] {
   return issues;
 }
 
+function bytesToHex(bytes: Uint8Array): string {
+  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
+function toEip55ChecksumAddress(address: string): string {
+  const hexAddress = address.slice(2).toLowerCase();
+  const hash = bytesToHex(keccak_256(Buffer.from(hexAddress, 'ascii')));
+
+  let checksummedAddress = '0x';
+  for (let i = 0; i < hexAddress.length; i++) {
+    const character = hexAddress[i];
+    checksummedAddress += parseInt(hash[i], 16) >= 8 ? character.toUpperCase() : character;
+  }
+
+  return checksummedAddress;
+}
+
+function validateEthereumAddressChecksums(lines: string[]): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+
+  lines.forEach((line, index) => {
+    const addresses = line.match(ETHEREUM_ADDRESS_REGEX) ?? [];
+
+    for (const address of addresses) {
+      const checksummedAddress = toEip55ChecksumAddress(address);
+
+      if (address !== checksummedAddress) {
+        issues.push({
+          line: index + 1,
+          severity: 'error',
+          message: '⛓️ Ethereum address is not EIP-55 checksum-cased',
+          found: address,
+          expected: checksummedAddress,
+          reason: 'Atlas Ethereum addresses should use checksum casing to make transcription errors easier to spot.',
+          action: 'Replace the address with its EIP-55 checksum-cased form.',
+        });
+      }
+    }
+  });
+
+  return issues;
+}
+
 // ============================================================================
 // Main Validator
 // ============================================================================
@@ -803,6 +849,7 @@ function validate(content: string): ValidationIssue[] {
   }
 
   issues.push(...validateNesting(docs));
+  issues.push(...validateEthereumAddressChecksums(lines));
   issues.push(...validateUUIDs(docs));
 
   // Filter out suppressed issues
