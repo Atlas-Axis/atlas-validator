@@ -5,7 +5,8 @@
   "main": "validate-atlas-markdown.ts",
   "type": "module",
   "scripts": {
-    "validate": "tsx validate-atlas-markdown.ts"
+    "validate": "tsx validate-atlas-markdown.ts",
+    "test": "tsx tests/eip55-addresses.test.ts"
   },
   "keywords": [
     "markdown",
@@ -24,7 +25,8 @@
   },
   "homepage": "https://github.com/Atlas-Axis/atlas-validator#readme",
   "dependencies": {
-    "@actions/core": "^1.10.1"
+    "@actions/core": "^1.10.1",
+    "@noble/hashes": "^2.2.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
